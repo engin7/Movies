@@ -112,9 +112,17 @@
                             <constraint firstItem="mEK-7I-WbW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ork-Nx-xkM"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="xXr-On-xeN"/>
+                    <navigationItem key="navigationItem" id="xXr-On-xeN">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="rectangle.grid.2x2.fill" catalog="system" id="iGL-Y9-TSr">
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="viewTogglePressed:" destination="BYZ-38-t0r" id="5BY-CB-99G"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="movieListCV" destination="mEK-7I-WbW" id="hH2-6d-efp"/>
+                        <outlet property="viewToggle" destination="iGL-Y9-TSr" id="70w-a0-P9S"/>
                         <segue destination="RTQ-DR-OGj" kind="show" identifier="MovieDetailViewController" id="bod-RE-ZDg"/>
                     </connections>
                 </viewController>
@@ -214,6 +222,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="rectangle.grid.2x2.fill" catalog="system" width="128" height="99"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <namedColor name="ColorDarkG">

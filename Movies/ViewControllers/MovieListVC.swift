@@ -15,6 +15,17 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     private let collectionViewDataSource = MovieListDataSource() //ViewModel
     var searchController: UISearchController!
     
+    var listView = true
+    @IBOutlet weak var viewToggle: UIBarButtonItem!
+    @IBAction func viewTogglePressed(_ sender: Any) {
+         listView = !listView
+        if listView {
+            viewToggle.image = UIImage(systemName: "rectangle.grid.2x2.fill")
+        } else {
+            viewToggle.image = UIImage(systemName: "text.justify")
+        }
+         movieListCV.reloadData()
+    }
     
     override func viewDidLoad() {
       
@@ -119,14 +130,21 @@ extension MovieListViewController: UISearchResultsUpdating {
 extension MovieListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let height = CGFloat(150)
+        let height:CGFloat
         var width:CGFloat
         // two rows for ipad
-        if collectionView.frame.size.width < 768 {
+        if collectionView.frame.size.width < 768 && listView {
+            height = CGFloat(150)
             width  = collectionView.frame.width-10
         } else {
+            height = CGFloat(250)
             width  = collectionView.frame.width/2-10
         }
+       
         return CGSize(width: width, height: height)
     }
+    
+   
+
+    
 }
