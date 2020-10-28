@@ -11,6 +11,7 @@ class MovieListCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var movieImageView: UIImageView!
     @IBOutlet weak var movieLabel: UILabel!
+    @IBOutlet weak var star: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

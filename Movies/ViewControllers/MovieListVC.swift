@@ -22,13 +22,21 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
         title = "Movie List"
         setupSearchController()
         movieListCV.dataSource = collectionViewDataSource
-        network.getMovies(get: .list, movie: nil, completion: {success in
+        network.getMovies(get: .list, movie: nil, completion: { [self]success in
             if success {
-                self.movieListCV.reloadData()
-              }
+                movieListCV.reloadData()
+            } else {
+                showNetworkError()
+            }
         })
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        let index = movieListCV.indexPathsForSelectedItems
+        if index?.isEmpty != true {
+            movieListCV.reloadItems(at: index!) //update starred condition
+        }
+    }
     
     func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
@@ -60,7 +68,6 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
         selectedMovie = network.movieList[indexPath.row]
         }
         self.performSegue(withIdentifier: SegueTo.showDetails.rawValue, sender: selectedMovie)
-        collectionView.deselectItem(at: indexPath, animated: true)
         
     }
    

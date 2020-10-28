@@ -57,12 +57,22 @@
                                                     </attributedString>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="d8g-H4-gdH">
+                                                    <rect key="frame" x="327" y="7.5" width="30" height="30"/>
+                                                    <color key="tintColor" systemColor="systemYellowColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="AUc-pN-SU4"/>
+                                                        <constraint firstAttribute="width" constant="30" id="cu5-Hh-n5H"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="d8g-H4-gdH" firstAttribute="top" secondItem="I6T-R1-fAF" secondAttribute="top" constant="8" id="4hE-Tw-0S5"/>
                                                 <constraint firstItem="rXs-pc-cLQ" firstAttribute="leading" secondItem="I6T-R1-fAF" secondAttribute="leading" id="63p-3b-MoP"/>
                                                 <constraint firstItem="gqy-i7-sLA" firstAttribute="leading" secondItem="I6T-R1-fAF" secondAttribute="leading" id="Dvj-s6-Tn8"/>
                                                 <constraint firstItem="gqy-i7-sLA" firstAttribute="bottom" secondItem="rXs-pc-cLQ" secondAttribute="bottom" id="Knk-xF-08G"/>
                                                 <constraint firstAttribute="bottom" secondItem="gqy-i7-sLA" secondAttribute="bottom" id="LOW-nv-c27"/>
+                                                <constraint firstAttribute="trailing" secondItem="d8g-H4-gdH" secondAttribute="trailing" constant="8" id="NKk-N8-bfa"/>
                                                 <constraint firstAttribute="trailing" secondItem="rXs-pc-cLQ" secondAttribute="trailing" id="g2n-VW-pEJ"/>
                                                 <constraint firstItem="rXs-pc-cLQ" firstAttribute="top" secondItem="I6T-R1-fAF" secondAttribute="top" id="gZV-ND-iVE"/>
                                                 <constraint firstAttribute="trailing" secondItem="gqy-i7-sLA" secondAttribute="trailing" id="izA-KG-ORx"/>
@@ -71,6 +81,7 @@
                                         <connections>
                                             <outlet property="movieImageView" destination="rXs-pc-cLQ" id="Yy8-0d-yOk"/>
                                             <outlet property="movieLabel" destination="gqy-i7-sLA" id="z60-ON-vCR"/>
+                                            <outlet property="star" destination="d8g-H4-gdH" id="QSJ-jj-9Iq"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -165,13 +176,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="U2K-TT-oD3">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="star" catalog="system" id="E2g-ew-Q6z"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="star" catalog="system" id="E2g-ew-Q6z">
+                            <connections>
+                                <action selector="starTapped:" destination="RTQ-DR-OGj" id="8jN-BH-Vz5"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="movieDescription" destination="SH3-Fc-q1i" id="bOE-eI-kw0"/>
                         <outlet property="movieName" destination="FG7-3U-Rci" id="i85-MS-VWv"/>
                         <outlet property="movieVoteCount" destination="Jnk-Ak-fLE" id="zq3-T8-KpW"/>
                         <outlet property="posterImage" destination="Hv5-7Q-GMz" id="QY2-MP-zLW"/>
+                        <outlet property="starButton" destination="E2g-ew-Q6z" id="1AU-FZ-hMT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F3Y-gd-uSX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -196,37 +212,10 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="71.651785714285708"/>
         </scene>
-        <!--Search Table View Controller-->
-        <scene sceneID="T2h-mt-cuk">
-            <objects>
-                <tableViewController id="s2i-SF-QZc" customClass="SearchTableViewController" customModule="Movies" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="13L-q4-ZmM">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="EPR-dP-HiW">
-                                <rect key="frame" x="0.0" y="28" width="375" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EPR-dP-HiW" id="dxz-6R-tgn">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="s2i-SF-QZc" id="ZYO-Lo-82y"/>
-                            <outlet property="delegate" destination="s2i-SF-QZc" id="beI-18-dFn"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Eg5-uv-2fN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1122" y="-674"/>
-        </scene>
     </scenes>
     <resources>
         <image name="star" catalog="system" width="128" height="116"/>
+        <image name="star.fill" catalog="system" width="128" height="116"/>
         <namedColor name="ColorDarkG">
             <color red="0.19200000166893005" green="0.19200000166893005" blue="0.19200000166893005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -238,6 +227,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

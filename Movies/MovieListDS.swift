@@ -56,13 +56,18 @@ class MovieListDataSource: NSObject, UICollectionViewDataSource {
         movie = network.movieList[indexPath.row]
         }
         let imageURL = URL(string: "http://image.tmdb.org/t/p/w300" + (movie.backdropImagePath ))!
+        let defaults = UserDefaults.standard
+        let starred = defaults.bool(forKey: String(movie.id))
         
-  
+        if starred {
+            cell.star.isHidden = false
+        } else {
+            cell.star.isHidden = true
+        }
         cell.movieLabel.text = movie.title
         cell.movieImageView.loadImageUsingCache(url: imageURL)
         
         if indexPath.row == network.movieList.count - 1 { // reached last item in list
-            
             network.pageIndex += 1
             self.network.getMovies(get: .list, movie: nil, completion: {success in
                 if success {
