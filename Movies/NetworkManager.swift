@@ -16,12 +16,13 @@ class NetworkManager {
     private let byIdURL = "https://api.themoviedb.org/3/movie"
     private var dataTask: URLSessionDataTask? = nil
     typealias SearchComplete = (Bool) -> Void
-
   
     var movieList:[Movie] = []
+    var filteredMovies: [Movie] = []
     var movieById:Movie?
     var movieListPage: Int?
     var pageIndex = 1
+    var isFiltering = false
     
     enum GetType {
        case list
