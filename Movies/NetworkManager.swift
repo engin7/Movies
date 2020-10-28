@@ -23,7 +23,8 @@ class NetworkManager {
     var movieListPage: Int?
     var pageIndex = 1
     var isFiltering = false
-    
+    var listView = true
+
     enum GetType {
        case list
        case byId

@@ -185,6 +185,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="U2K-TT-oD3">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="star" catalog="system" id="E2g-ew-Q6z">
+                            <color key="tintColor" systemColor="systemYellowColor"/>
                             <connections>
                                 <action selector="starTapped:" destination="RTQ-DR-OGj" id="8jN-BH-Vz5"/>
                             </connections>

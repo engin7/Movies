@@ -9,23 +9,21 @@ import UIKit
 
 class MovieListViewController: UIViewController, UICollectionViewDelegate, UISearchBarDelegate {
     
-    private let network = NetworkManager.shared
-    
-    @IBOutlet weak var movieListCV: UICollectionView!
-    private let collectionViewDataSource = MovieListDataSource() //ViewModel
-    var searchController: UISearchController!
-    
-    var listView = true
-    @IBOutlet weak var viewToggle: UIBarButtonItem!
-    @IBAction func viewTogglePressed(_ sender: Any) {
-         listView = !listView
-        if listView {
+    @IBOutlet private weak var movieListCV: UICollectionView!
+    @IBOutlet private weak var viewToggle: UIBarButtonItem!
+    @IBAction private func viewTogglePressed(_ sender: Any) {
+        network.listView = !network.listView
+        if network.listView {
             viewToggle.image = UIImage(systemName: "rectangle.grid.2x2.fill")
         } else {
             viewToggle.image = UIImage(systemName: "text.justify")
         }
          movieListCV.reloadData()
     }
+    
+    private let network = NetworkManager.shared
+    private let collectionViewDataSource = MovieListDataSource() //ViewModel
+    private var searchController: UISearchController!
     
     override func viewDidLoad() {
       
@@ -49,7 +47,7 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
         }
     }
     
-    func setupSearchController() {
+    private func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -63,14 +61,14 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     
     // MARK: Navigation
       
-      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+      override  func prepare(for segue: UIStoryboardSegue, sender: Any?) {
           if (segue.identifier == SegueTo.showDetails.rawValue) {
               let vc = segue.destination as! MovieDetailViewController
               vc.movie = sender as? Movie
           }
       }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
            
         let selectedMovie: Movie
         if network.isFiltering {
@@ -84,7 +82,7 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
    
     // MARK: Helper Methods
     
-    func showNetworkError() {
+    private func showNetworkError() {
         let alert = UIAlertController(title: "Sorry...", message: "Error occured connecting the Movie DataBase. Please try again.", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -98,14 +96,14 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
 
 extension MovieListViewController {
 
-    enum SegueTo: String {
+    private enum SegueTo: String {
         case showDetails = "MovieDetailViewController"
     }
 }
 
 extension MovieListViewController: UISearchResultsUpdating {
     
-    func filterContentForSearchText(_ searchText: String) {
+    private func filterContentForSearchText(_ searchText: String) {
         network.filteredMovies = network.movieList.filter { (movie: Movie) -> Bool in
         return movie.title.lowercased().contains(searchText.lowercased())
       }
@@ -132,14 +130,23 @@ extension MovieListViewController: UICollectionViewDelegateFlowLayout {
         
         let height:CGFloat
         var width:CGFloat
-        // two rows for ipad
-        if collectionView.frame.size.width < 768 && listView {
+        // three rows for ipad
+        if collectionView.frame.size.width >= 768 {
+            viewToggle.isEnabled = false
+            viewToggle.image = nil
+            viewToggle.title = ""
+            network.listView = false
+            height = CGFloat(350)
+            width  = collectionView.frame.width/3-15
+        } else if network.listView {
             height = CGFloat(150)
             width  = collectionView.frame.width-10
         } else {
             height = CGFloat(250)
             width  = collectionView.frame.width/2-10
         }
+        
+        
        
         return CGSize(width: width, height: height)
     }

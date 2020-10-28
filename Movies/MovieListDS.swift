@@ -55,7 +55,13 @@ class MovieListDataSource: NSObject, UICollectionViewDataSource {
         } else {
         movie = network.movieList[indexPath.row]
         }
-        let imageURL = URL(string: "http://image.tmdb.org/t/p/w300" + (movie.backdropImagePath ))!
+        var imageURL:URL    // pick image according to cell ratio for better scaling
+        if network.listView {
+            imageURL = URL(string: "http://image.tmdb.org/t/p/w300" + (movie.backdropImagePath ))!
+        } else {
+            imageURL = URL(string: "http://image.tmdb.org/t/p/w342" + movie.posterImagePath)!
+        }
+        
         let defaults = UserDefaults.standard
         let starred = defaults.bool(forKey: String(movie.id))
         

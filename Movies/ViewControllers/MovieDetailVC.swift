@@ -9,47 +9,51 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
 
-    @IBOutlet weak var posterImage: UIImageView!
-    @IBOutlet weak var movieName: UILabel!
-    @IBOutlet weak var movieDescription: UITextView!
-    @IBOutlet weak var movieVoteCount: UILabel!
-    @IBOutlet weak var starButton: UIBarButtonItem!
+    @IBOutlet private weak var posterImage: UIImageView!
+    @IBOutlet private weak var movieName: UILabel!
+    @IBOutlet private weak var movieDescription: UITextView!
+    @IBOutlet private weak var movieVoteCount: UILabel!
+    @IBOutlet private weak var starButton: UIBarButtonItem!
     
-    @IBAction func starTapped(_ sender: Any) {
+    @IBAction private func starTapped(_ sender: Any) {
         defaults.set(!starred, forKey: key)
-        if starred {
-            starButton.image = UIImage(systemName: "star")
-        } else {
-            starButton.image = UIImage(systemName: "star.fill")!.withTintColor(.yellow)
-        }
+        starred = !starred
+        checkStar()
      }
     
-    let defaults = UserDefaults.standard
+    private let defaults = UserDefaults.standard
+    private var key = ""
+    private var starred = false
     var movie : Movie?
-    var key = ""
-    var starred = false
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUI()
         setStar()
+        setUI()
     }
     
-    func setStar() {
+    private func setStar() {
         
         if let id = movie?.id {
             key = String(id)
         }
         if key == "" {
             starButton.isEnabled = false
-        }
-        starred = defaults.bool(forKey: key)
-        if starred {
-            starButton.image = UIImage(systemName: "star.fill")!.withTintColor(.yellow)
+        } else {
+            starred = defaults.bool(forKey: key)
+            checkStar()
         }
     }
     
-    func setUI() {
+    private func checkStar() {
+        if starred {
+            starButton.image = UIImage(systemName: "star.fill")!
+        } else {
+            starButton.image = UIImage(systemName: "star")
+        }
+    }
+    
+    private func setUI() {
         title = movie?.title
         movieName.text = movie?.title
         movieDescription.text = movie?.overview
