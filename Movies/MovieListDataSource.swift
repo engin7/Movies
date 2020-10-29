@@ -9,18 +9,13 @@ import UIKit
 
 class MovieListDataSource: NSObject, UICollectionViewDataSource {
     
+    static let shared = MovieListDataSource() // singleton
     private let network = NetworkManager.shared
-
-    var movieList: [Movie]
-    var isFiltering: Bool
-    var listView: Bool
     
-    // Dependency injection (DI)
-    init(movies: [Movie], listView: Bool, filtering: Bool?) {
-        self.movieList = movies
-        self.listView = listView
-        self.isFiltering = filtering ?? false
-    }
+    var movieList: [Movie] = []
+    var listView = true
+    var isFiltering = false
+    
      
      func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
