@@ -18,7 +18,7 @@
 		101EBA4D25472CC900461EE9 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 101EBA4C25472CC900461EE9 /* keys.plist */; };
 		101EBA5225472D0200461EE9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101EBA5125472D0200461EE9 /* NetworkManager.swift */; };
 		101EBA5725472D3B00461EE9 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101EBA5625472D3B00461EE9 /* Movie.swift */; };
-		101EBA5C25472F6C00461EE9 /* MovieListDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101EBA5B25472F6C00461EE9 /* MovieListDS.swift */; };
+		101EBA5C25472F6C00461EE9 /* MovieListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101EBA5B25472F6C00461EE9 /* MovieListDataSource.swift */; };
 		101EBA6425473A2E00461EE9 /* MovieListCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101EBA6325473A2E00461EE9 /* MovieListCVC.swift */; };
 		101EBA6C2547455F00461EE9 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101EBA6B2547455F00461EE9 /* UIImageViewExtension.swift */; };
 		101EBA712548441100461EE9 /* MovieDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101EBA702548441100461EE9 /* MovieDetailVC.swift */; };
@@ -60,7 +60,7 @@
 		101EBA4C25472CC900461EE9 /* keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 		101EBA5125472D0200461EE9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		101EBA5625472D3B00461EE9 /* Movie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
-		101EBA5B25472F6C00461EE9 /* MovieListDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListDS.swift; sourceTree = "<group>"; };
+		101EBA5B25472F6C00461EE9 /* MovieListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListDataSource.swift; sourceTree = "<group>"; };
 		101EBA6325473A2E00461EE9 /* MovieListCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListCVC.swift; sourceTree = "<group>"; };
 		101EBA6B2547455F00461EE9 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		101EBA702548441100461EE9 /* MovieDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailVC.swift; sourceTree = "<group>"; };
@@ -121,7 +121,7 @@
 				101EBA6B2547455F00461EE9 /* UIImageViewExtension.swift */,
 				101EBA5625472D3B00461EE9 /* Movie.swift */,
 				101EBA832548B22600461EE9 /* Views */,
-				101EBA5B25472F6C00461EE9 /* MovieListDS.swift */,
+				101EBA5B25472F6C00461EE9 /* MovieListDataSource.swift */,
 				101EBA872548B24600461EE9 /* ViewControllers */,
 				101EBA1F254729D400461EE9 /* Assets.xcassets */,
 				101EBA1C254729D000461EE9 /* Main.storyboard */,
@@ -300,7 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				101EBA5225472D0200461EE9 /* NetworkManager.swift in Sources */,
-				101EBA5C25472F6C00461EE9 /* MovieListDS.swift in Sources */,
+				101EBA5C25472F6C00461EE9 /* MovieListDataSource.swift in Sources */,
 				101EBA1B254729D000461EE9 /* MovieListVC.swift in Sources */,
 				101EBA17254729D000461EE9 /* AppDelegate.swift in Sources */,
 				101EBA712548441100461EE9 /* MovieDetailVC.swift in Sources */,

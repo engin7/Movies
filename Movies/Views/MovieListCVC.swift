@@ -21,7 +21,7 @@ class MovieListCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         movieImageView.image = nil
         movieLabel.text = nil
-
+        star.isHidden = true
     }
     
     

@@ -12,28 +12,32 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     @IBOutlet private weak var movieListCV: UICollectionView!
     @IBOutlet private weak var viewToggle: UIBarButtonItem!
     @IBAction private func viewTogglePressed(_ sender: Any) {
-        network.listView = !network.listView
-        if network.listView {
+        listView = !listView
+        if listView {
             viewToggle.image = UIImage(systemName: "rectangle.grid.2x2.fill")
         } else {
             viewToggle.image = UIImage(systemName: "text.justify")
         }
-         movieListCV.reloadData()
+        collectionViewDataSource = MovieListDataSource(movies: network.movieList, listView: listView, filtering: filtering)
     }
     
     private let network = NetworkManager.shared
-    private let collectionViewDataSource = MovieListDataSource() //ViewModel
     private var searchController: UISearchController!
+    private var filteredMovies = [Movie]()
+    private (set) var listView = true
+    private (set) var filtering = false
+    private var collectionViewDataSource = MovieListDataSource(movies: [Movie](), listView: true, filtering: false) {
+        didSet { movieListCV.dataSource = collectionViewDataSource }
+    }
     
     override func viewDidLoad() {
       
         super.viewDidLoad()
         title = "Movie List"
         setupSearchController()
-        movieListCV.dataSource = collectionViewDataSource
         network.getMovies(get: .list, movie: nil, completion: { [self]success in
             if success {
-                movieListCV.reloadData()
+                collectionViewDataSource = MovieListDataSource(movies: network.movieList, listView: listView, filtering: false)
             } else {
                 showNetworkError()
             }
@@ -43,6 +47,7 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     override func viewWillAppear(_ animated: Bool) {
         let index = movieListCV.indexPathsForSelectedItems
         if index?.isEmpty != true {
+            
             movieListCV.reloadItems(at: index!) //update starred condition
         }
     }
@@ -51,6 +56,7 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         searchController.searchBar.placeholder = "Search Movies"
         definesPresentationContext = true
@@ -70,9 +76,12 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     
      func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
            
+        if filtering && filteredMovies.count == 0 {
+            return
+        }
         let selectedMovie: Movie
-        if network.isFiltering {
-        selectedMovie = network.filteredMovies[indexPath.row]
+        if filtering {
+        selectedMovie = filteredMovies[indexPath.row]
         } else {
         selectedMovie = network.movieList[indexPath.row]
         }
@@ -104,25 +113,24 @@ extension MovieListViewController {
 extension MovieListViewController: UISearchResultsUpdating {
     
     private func filterContentForSearchText(_ searchText: String) {
-        network.filteredMovies = network.movieList.filter { (movie: Movie) -> Bool in
+        filteredMovies = network.movieList.filter { (movie: Movie) -> Bool in
         return movie.title.lowercased().contains(searchText.lowercased())
       }
-        movieListCV.reloadData()
+        collectionViewDataSource = MovieListDataSource(movies: filteredMovies, listView: listView, filtering: filtering)
     }
     
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         if  searchBar.text!.count < 2 {
-            network.isFiltering = false
-            network.filteredMovies = []
-            movieListCV.reloadData()
+            filtering = false
+            filteredMovies = []
+            collectionViewDataSource = MovieListDataSource(movies: network.movieList, listView: listView, filtering: filtering)
         } else {
-            network.isFiltering = searchController.isActive
+            filtering = true
             guard let text = searchBar.text else { return }
             filterContentForSearchText(text)
         }
     }
-   
 }
 
 extension MovieListViewController: UICollectionViewDelegateFlowLayout {
@@ -135,23 +143,20 @@ extension MovieListViewController: UICollectionViewDelegateFlowLayout {
             viewToggle.isEnabled = false
             viewToggle.image = nil
             viewToggle.title = ""
-            network.listView = false
+            listView = false
             height = CGFloat(350)
             width  = collectionView.frame.width/3-15
-        } else if network.listView {
+        } else if listView || (filtering && filteredMovies.count == 0) {
             height = CGFloat(150)
             width  = collectionView.frame.width-10
         } else {
             height = CGFloat(250)
             width  = collectionView.frame.width/2-10
         }
-        
-        
-       
+     
         return CGSize(width: width, height: height)
     }
-    
-   
-
-    
+ 
 }
+
+ 

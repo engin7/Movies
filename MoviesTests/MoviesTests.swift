@@ -10,19 +10,53 @@ import XCTest
 
 class MoviesTests: XCTestCase {
 
+    private var sut : NetworkManager! //System Under Test
+
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        sut = NetworkManager.shared
+        
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        sut = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testNetworkListExample() throws {
+        
+        sut.getMovies(get: .list, movie: nil, completion: { success in
+            if success { XCTAssertNotNil(self.sut?.movieList) }
+        })
     }
 
+    func testNetworkByIdExample() throws {
+        // not giving the movie paramater should fail and return nil
+        sut.getMovies(get: .byId, movie: nil, completion: { success in
+            if success { } else { XCTAssertNil(self.sut?.movieById) }
+        })
+    }
+    
+    func testNetworkLoadingListsExample() throws {
+        
+        let promise = expectation(description: "Status code: 200")
+ 
+        func getMovies() {
+            while self.sut.pageIndex < 4 {
+                sut.getMovies(get: .list, movie: nil, completion: { success in
+                if success {
+                    self.sut.pageIndex += 2
+                    getMovies() // recursive
+                }})
+            }
+            promise.fulfill() // fulfill expectation after all functions called
+        }
+        
+        getMovies()
+        wait(for: [promise], timeout: 10)
+        // 20 pages per request returning from API. 20*5 = 100 movie items should be added.
+        XCTAssertNotEqual(self.sut.movieList.count, 60)
+    }
+    
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {

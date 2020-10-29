@@ -17,14 +17,11 @@ class NetworkManager {
     private var dataTask: URLSessionDataTask? = nil
     typealias SearchComplete = (Bool) -> Void
   
-    var movieList:[Movie] = []
-    var filteredMovies: [Movie] = []
-    var movieById:Movie?
-    var movieListPage: Int?
+    private (set) var movieList:[Movie] = []
+    private (set) var movieById:Movie?
+    private (set) var movieListPage: Int?
     var pageIndex = 1
-    var isFiltering = false
-    var listView = true
-
+  
     enum GetType {
        case list
        case byId
@@ -43,14 +40,14 @@ class NetworkManager {
             url = URL(string: listURL + "?api_key=" + apiKey! + "&language=en-US&page=&page=" + String(pageIndex))!
         case .byId:
             let api = "?api_key=" + apiKey! + "&language=en-US"
-            url = URL(string: byIdURL + "/" + String(movie!.id) + api)!
+            url = URL(string: byIdURL + "/" + String(movie?.id ?? -1) + api)!
         }
         
         dataTask?.cancel()
         
         let session = URLSession.shared
         
-        dataTask = session.dataTask(with: url, completionHandler: {data, response, error in
+        dataTask = session.dataTask(with: url, completionHandler: { [self] data, response, error in
             // if cancelled ignore error code and return
             if let error = error as NSError?, error.code == -999 {
                 return
@@ -59,10 +56,10 @@ class NetworkManager {
                 
                 switch get {
                 case .byId:
-                    self.movieById = self.parseDetail(data: data)
+                     movieById =  parseDetail(data: data)
                 case .list:
-                    self.movieList.append(contentsOf: self.parse(data: data).results)
-                    self.movieListPage = self.parse(data: data).page
+                     movieList.append(contentsOf: parse(data: data).results)
+                     movieListPage = parse(data: data).page
                 }
                 DispatchQueue.main.async {
                     completion(true)

@@ -22,7 +22,7 @@ struct Movie: Codable {
     var posterImagePath      = ""
     var voteCount            = 0.0
     var id                   = 0
-    var backdropImagePath    = ""
+    var backdropImagePath: String?
  
     enum CodingKeys: String, CodingKey {
         case posterImagePath = "poster_path"
