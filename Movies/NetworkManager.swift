@@ -19,9 +19,8 @@ class NetworkManager {
   
     private (set) var movieList:[Movie] = []
     private (set) var movieById:Movie?
-    private (set) var movieListPage: Int?
-    var pageIndex = 1
-  
+    var movieListPage = 1
+ 
     enum GetType {
        case list
        case byId
@@ -37,7 +36,7 @@ class NetworkManager {
         
         switch get {
         case .list:
-            url = URL(string: listURL + "?api_key=" + apiKey! + "&language=en-US&page=&page=" + String(pageIndex))!
+            url = URL(string: listURL + "?api_key=" + apiKey! + "&language=en-US&page=&page=" + String(movieListPage))!
         case .byId:
             let api = "?api_key=" + apiKey! + "&language=en-US"
             url = URL(string: byIdURL + "/" + String(movie?.id ?? -1) + api)!

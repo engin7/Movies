@@ -12,13 +12,13 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     @IBOutlet private weak var movieListCV: UICollectionView!
     @IBOutlet private weak var viewToggle: UIBarButtonItem!
     @IBAction private func viewTogglePressed(_ sender: Any) {
-        listView = !listView
-        if listView {
+        dataSource.listView = !dataSource.listView
+        if dataSource.listView {
             viewToggle.image = UIImage(systemName: "rectangle.grid.2x2.fill")
         } else {
             viewToggle.image = UIImage(systemName: "text.justify")
         }
-        dataSource.listView  = listView
+        dataSource.listView  = dataSource.listView
         movieListCV.reloadData()
     }
     
@@ -26,14 +26,14 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     private var dataSource = MovieListDataSource.shared
     private var searchController: UISearchController!
     private var filteredMovies = [Movie]()
-    private var listView = true
-    
+ 
     override func viewDidLoad() {
 
         super.viewDidLoad()
         title = "Movie List"
         setupSearchController()
         movieListCV.dataSource = dataSource
+        dataSource.delegate = self
         network.getMovies(get: .list, movie: nil, completion: { [self]success in
             if success {
                 dataSource.movieList = network.movieList
@@ -47,7 +47,6 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
     override func viewWillAppear(_ animated: Bool) {
         let index = movieListCV.indexPathsForSelectedItems
         if index?.isEmpty != true {
-            
             movieListCV.reloadItems(at: index!) //update starred condition
         }
     }
@@ -61,7 +60,6 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
         searchController.searchBar.placeholder = "Search Movies"
         definesPresentationContext = true
         searchController.searchBar.delegate = self
-
     }
     
     
@@ -86,7 +84,6 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
         selectedMovie = network.movieList[indexPath.row]
         }
         self.performSegue(withIdentifier: SegueTo.showDetails.rawValue, sender: selectedMovie)
-        
     }
    
     // MARK: Helper Methods
@@ -98,13 +95,11 @@ class MovieListViewController: UIViewController, UICollectionViewDelegate, UISea
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
-    
 }
 
 // MARK: - Extensions
 
 extension MovieListViewController {
-
     private enum SegueTo: String {
         case showDetails = "MovieDetailViewController"
     }
@@ -123,7 +118,7 @@ extension MovieListViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
-        if  searchBar.text!.count < 2 {
+        if  searchBar.text!.count < 3 {
             filteredMovies = []
             dataSource.movieList = network.movieList
             dataSource.isFiltering = false
@@ -146,10 +141,10 @@ extension MovieListViewController: UICollectionViewDelegateFlowLayout {
             viewToggle.isEnabled = false
             viewToggle.image = nil
             viewToggle.title = ""
-            listView = false
+            dataSource.listView = false
             height = CGFloat(350)
             width  = collectionView.frame.width/3-15
-        } else if listView || (dataSource.isFiltering && filteredMovies.count == 0) {
+        } else if dataSource.listView || (dataSource.isFiltering && filteredMovies.count == 0) {
             height = CGFloat(150)
             width  = collectionView.frame.width-10
         } else {
@@ -159,7 +154,19 @@ extension MovieListViewController: UICollectionViewDelegateFlowLayout {
      
         return CGSize(width: width, height: height)
     }
- 
 }
 
- 
+extension MovieListViewController: MovieListDataSourceDelegate {
+    func loadMorePages() {
+            network.movieListPage += 1
+            self.network.getMovies(get: .list, movie: nil, completion: {success in
+                if success {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+                        dataSource.movieList = network.movieList
+                        dataSource.movieListPage = network.movieListPage
+                        movieListCV.reloadData()
+                    }
+                }
+            })
+    }
+}

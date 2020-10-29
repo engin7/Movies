@@ -7,23 +7,27 @@
 
 import UIKit
 
+protocol MovieListDataSourceDelegate: class {
+    func loadMorePages()
+}
+
 class MovieListDataSource: NSObject, UICollectionViewDataSource {
     
     static let shared = MovieListDataSource() // singleton
-    private let network = NetworkManager.shared
-    
+    weak var delegate: MovieListDataSourceDelegate?
+
     var movieList: [Movie] = []
     var listView = true
     var isFiltering = false
+    var movieListPage = 1
     
-     
      func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionFooter {
             let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! FooterCollectionReusableView
             
             footerView.spinner.startAnimating()
-            if network.movieListPage == 500 || isFiltering {   // last page or filter
+            if movieListPage == 500 || isFiltering {   // last page or filter
                 footerView.spinner.stopAnimating()
             }
             
@@ -63,29 +67,15 @@ class MovieListDataSource: NSObject, UICollectionViewDataSource {
         let defaults = UserDefaults.standard
         let starred = defaults.bool(forKey: String(movie.id))
         
-         
         cell.star.isHidden = !starred
         cell.movieLabel.text = movie.title
         cell.movieImageView.loadImageUsingCache(url: imageURL)
         
         if indexPath.row == movieList.count - 1 && !isFiltering { // reached last item in list
-            loadMorePages(view: collectionView)
+            delegate?.loadMorePages() 
         }
         return cell
     }
-    
-    func loadMorePages(view: UICollectionView){
-        network.pageIndex += 1
-        self.network.getMovies(get: .list, movie: nil, completion: {success in
-            if success {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
-                    movieList = network.movieList
-                    view.reloadData()
-                }
-            }
-        })
-    }
-    
     
 }
   
